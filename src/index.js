@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 
-import "./bulma.css";
+import 'bulma/css/bulma.css';
 import "./index.css";
 
 import registerServiceWorker from "./registerServiceWorker";

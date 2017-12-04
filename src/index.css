@@ -147,6 +147,14 @@ line {
   }
 }
 
+img,
+embed,
+object,
+audio,
+video {
+  max-width: none;
+}
+
 .primary-font {
   font-family: "Berkshire Swash", monospace;
 }
@@ -190,6 +198,24 @@ line {
 .is-tab-link:active {
   position: relative;
   top: 2px;
+}
+
+.button {
+  background-color: inherit;
+  border-color: inherit;
+  color: inherit;
+}
+
+.button:hover, .button.is-hovered {
+  border-color: inherit;
+  color: #363636;
+}
+.button[disabled] {
+  background-color: inherit;
+  border-color: inherit;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  opacity: 0.5;
 }
 
 .button.is-text:active,
