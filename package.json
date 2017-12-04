@@ -1,13 +1,32 @@
 {
-  "name": "x3o63kp2pz",
-  "description": null,
-  "version": "0.0.0",
-  "dependencies": {
-    "react-dom": "16.0.0",
-    "react": "16.0.0"
-  },
+  "name": "salem",
+  "version": "0.1.0",
+  "private": true,
   "devDependencies": {
-    "react-scripts": "1.0.0"
+    "eslint": "^4.12.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-react": "^7.5.1",
+    "eslint-plugin-standard": "^3.0.1",
+    "prettier": "^1.8.2",
+    "react-scripts": "1.0.17"
+  },
+  "dependencies": {
+    "bulma": "^0.6.1",
+    "chance": "^1.0.12",
+    "chart.js": "^2.7.1",
+    "glamor": "^2.20.40",
+    "glamorous": "^4.11.0",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
+    "maybe-baby": "^1.0.20",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-chartjs-2": "^2.6.4",
+    "react-dom": "^16.2.0",
+    "react-tooltip": "^3.4.0",
+    "sortable-map": "0.0.17"
   },
   "scripts": {
     "start": "react-scripts start",
