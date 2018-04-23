@@ -32,7 +32,8 @@
     "react-chartjs-2": "^2.6.4",
     "react-dom": "^16.2.0",
     "react-tooltip": "^3.4.0",
-    "sortable-map": "0.0.17"
+    "sortable-map": "0.0.17",
+    "this-is-your-life-cli": "0.0.7"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
