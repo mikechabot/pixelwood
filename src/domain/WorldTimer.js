@@ -1,134 +1,113 @@
-import {
-  DAYS_IN_WORLD_YEAR,
-  SPEED_LIST,
-  DEFAULT_SPEED,
-  SEASON_RANGES,
-  VERBOSE_SEASON_RANGES
-} from "../common/app-const";
+import { DAYS_IN_WORLD_YEAR, SPEED_LIST, DEFAULT_SPEED } from '../common/app-const';
 
-function WorldTimer(onTick) {
-  this.onTick = onTick;
-  this.interval = null;
-  this.gameOver = false;
-  this.data = {
-    day: 0,
-    year: 0,
-    tickSpeed: DEFAULT_SPEED
-  };
+function IncrementFromValueToValue(min = 0, max = -1) {
+    this.value = min;
+    this.min = min;
+    this.max = max;
 }
 
+IncrementFromValueToValue.prototype = {
+    increment() {
+        const temp = this.value + 1;
+        this.value = this.max === -1 || temp <= this.max ? temp : this.min;
+    },
+    getValue() {
+        return this.value;
+    }
+};
+
+function WorldTimer(onTick) {
+    this.onTick = onTick;
+
+    this.day = new IncrementFromValueToValue(1, DAYS_IN_WORLD_YEAR);
+    this.year = new IncrementFromValueToValue(0);
+
+    this.tickSpeed = DEFAULT_SPEED;
+    this.interval = null;
+}
+WorldTimer.prototype.isRunning = function() {
+    return !!this.interval;
+};
+
 WorldTimer.prototype.start = function() {
-  if (!this.isRunning()) {
-    this.interval = setInterval(this.tick.bind(this), this.data.tickSpeed);
-    this.onTick(this.getState());
-  }
+    if (!this.isRunning()) {
+        this.interval = setInterval(this.tick.bind(this), this.getTickSpeed());
+        if (this.onTick) {
+            this.onTick(this);
+        }
+    }
 };
 
 WorldTimer.prototype.stop = function() {
-  if (this.isRunning()) {
-    clearInterval(this.interval);
-    this.interval = null;
-    this.onTick(this.getState());
-  }
-};
-
-WorldTimer.prototype.isRunning = function() {
-  return !!this.interval;
+    if (this.isRunning()) {
+        clearInterval(this.interval);
+        this.interval = null;
+        if (this.onTick) {
+            this.onTick(this);
+        }
+    }
 };
 
 WorldTimer.prototype.restart = function() {
-  this.stop();
-  this.start();
+    this.stop();
+    this.start();
 };
 
-WorldTimer.prototype.isGameOver = function() {
-  return this.gameOver;
-};
-
-WorldTimer.prototype.setGameOver = function(gameOver) {
-  this.gameOver = gameOver;
+WorldTimer.prototype.flush = function() {
+    if (this.isRunning()) {
+        this.restart();
+    }
+    if (this.onTick) {
+        this.onTick(this);
+    }
 };
 
 WorldTimer.prototype.getYear = function() {
-  return this.data.year;
+    return this.year.getValue();
 };
 
 WorldTimer.prototype.getDay = function() {
-  return this.data.day;
+    return this.day.getValue();
 };
 
 WorldTimer.prototype.getTickSpeed = function() {
-  return this.data.tickSpeed;
+    return this.tickSpeed;
 };
 
-WorldTimer.prototype.getSeason = function() {
-  const progress = this.getProgressRate();
-  return Object.keys(SEASON_RANGES).find(key => {
-    const range = SEASON_RANGES[key];
-    return progress >= range[0] && progress <= range[1];
-  });
+WorldTimer.prototype.setTickSpeed = function(tickSpeed) {
+    this.tickSpeed = tickSpeed;
 };
 
-WorldTimer.prototype.getVerboseSeason = function() {
-  const progress = this.getProgressRate();
-  return Object.keys(VERBOSE_SEASON_RANGES).find(key => {
-    const range = VERBOSE_SEASON_RANGES[key];
-    return progress >= range[0] && progress <= range[1];
-  });
-};
-
-WorldTimer.prototype.getProgressRate = function() {
-  return this.getDay() / DAYS_IN_WORLD_YEAR * 100;
-};
-
-WorldTimer.prototype.increaseSpeed = function() {
-  if (this.getSpeedIndex() !== SPEED_LIST.length - 1) {
-    this.__setTickSpeed(SPEED_LIST[this.getSpeedIndex() + 1]);
-  }
-  this.__flush();
-};
-
-WorldTimer.prototype.decreaseSpeed = function() {
-  if (this.getSpeedIndex() > 0) {
-    this.__setTickSpeed(SPEED_LIST[this.getSpeedIndex() - 1]);
-  }
-  this.__flush();
-};
-
-WorldTimer.prototype.__setTickSpeed = function(tickSpeed) {
-  this.data.tickSpeed = tickSpeed;
-};
-
-WorldTimer.prototype.__flush = function() {
-  if (this.isRunning()) {
-    this.restart();
-  }
-  this.onTick(this.getState());
+WorldTimer.prototype.getDailyProgress = function() {
+    return this.getDay() / this.day.max * 100;
 };
 
 WorldTimer.prototype.getSpeedIndex = function() {
-  return SPEED_LIST.indexOf(this.getTickSpeed());
+    return SPEED_LIST.indexOf(this.getTickSpeed());
 };
 
-WorldTimer.prototype.getState = function() {
-  return {
-    year: this.getYear(),
-    day: this.getDay(),
-    season: this.getSeason(),
-    verboseSeason: this.getVerboseSeason(),
-    tickSpeed: this.getTickSpeed()
-  };
+WorldTimer.prototype.increaseTickSpeed = function() {
+    if (this.getSpeedIndex() !== SPEED_LIST.length - 1) {
+        this.setTickSpeed(SPEED_LIST[this.getSpeedIndex() + 1]);
+    }
+    this.flush();
+};
+
+WorldTimer.prototype.decreaseTickSpeed = function() {
+    if (this.getSpeedIndex() > 0) {
+        this.setTickSpeed(SPEED_LIST[this.getSpeedIndex() - 1]);
+    }
+    this.flush();
 };
 
 WorldTimer.prototype.tick = function() {
-  const nextDay = this.data.day + 1;
-  if (nextDay <= 365) {
-    this.data.day = nextDay;
-  } else {
-    this.data.day = 0;
-    this.data.year++;
-  }
-  this.onTick(this.getState());
+    this.day.increment();
+    if (this.day.getValue() === 1) {
+        this.year.increment();
+    }
+    if (this.onTick) {
+        this.onTick(this);
+    }
 };
 
 export default WorldTimer;

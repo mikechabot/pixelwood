@@ -5,7 +5,7 @@ import {
     MARRY_AGE,
     MARRY_AGE_RANGE,
     MINIMUM_DAYS_SINCE_LAST_BIRTH,
-    DEATH_CHANGE_RANGES,
+    DEATH_AGE_CHANGE_RANGES,
     CREATE_FAMILY_UNIT_RATE,
     SAME_SEX_MARRIAGE_RATE,
     CREATE_CHILD_RATE,
@@ -15,7 +15,7 @@ import {
 
 const chance = Chance();
 
-function Population (startSize) {
+function Population(startSize) {
     this.population = [];
     if (startSize) {
         for (let i = 0; i < startSize; i++) {
@@ -24,12 +24,12 @@ function Population (startSize) {
     }
 }
 
-Population.prototype.addPerson = function (age) {
+Population.prototype.addPerson = function(age) {
     const person = {
-        id      : chance.guid(),
-        sex     : chance.gender(),
-        age     : age || chance.age(),
-        isAlive : true,
+        id: chance.guid(),
+        sex: chance.gender(),
+        age: age || chance.age(),
+        isAlive: true,
         isSingle: true
     };
 
@@ -45,63 +45,59 @@ Population.prototype.addPerson = function (age) {
     return person;
 };
 
-Population.prototype.getPopulation = function () {
+Population.prototype.getPopulation = function() {
     return this.population;
 };
 
-Population.prototype.getLivingPopulation = function () {
+Population.prototype.getLivingPopulation = function() {
     return this.population.filter(p => p.isAlive);
 };
 
-Population.prototype.getCount = function () {
+Population.prototype.getCount = function() {
     return this.population.length;
 };
 
-Population.prototype.getLivingPopulationCount = function () {
+Population.prototype.getLivingPopulationCount = function() {
     return this.getLivingPopulation().length;
 };
 
-Population.prototype.isAvailableToWork = function (person) {
-    return (
-        person &&
-    person.isAlive &&
-    (person.age >= CHILD_WORK_AGE && person.age <= 68)
-    );
+Population.prototype.isAvailableToWork = function(person) {
+    return person && person.isAlive && (person.age >= CHILD_WORK_AGE && person.age <= 68);
 };
 
-Population.prototype.getWorkforce = function () {
+Population.prototype.getWorkforce = function() {
     return this.population.filter(this.isAvailableToWork);
 };
 
-Population.prototype.getUnemployedCount = function () {
+Population.prototype.getUnemployedCount = function() {
     return this.getWorkforce().filter(p => !p.profession).length;
 };
 
-Population.prototype.getWorkersByProfession = function (profession) {
+Population.prototype.getWorkersByProfession = function(profession) {
     return this.getWorkforce().filter(w => w.profession === profession);
 };
 
-Population.prototype.getGatherers = function () {
+Population.prototype.getGatherers = function() {
     return this.getWorkersByProfession('Gatherer');
 };
 
-Population.prototype.getWoodCutters = function () {
+Population.prototype.getWoodCutters = function() {
     return this.getWorkersByProfession('Woodcutter');
 };
 
-Population.prototype.getDowsers = function () {
+Population.prototype.getDowsers = function() {
     return this.getWorkersByProfession('Dowser');
 };
 
-Population.prototype.getWorkforceCount = function () {
+Population.prototype.getWorkforceCount = function() {
     return this.getWorkforce().length;
 };
 
-Population.prototype.hasLivingCitizens = function () {
+Population.prototype.hasLivingCitizens = function() {
     return this.getLivingPopulationCount() > 0;
 };
 
-Population.prototype.getFamilies = function () {
+Population.prototype.getFamilies = function() {
     const uniq = [];
     return this.getLivingPopulation()
         .filter(p => !p.isSingle)
@@ -119,16 +115,11 @@ Population.prototype.getFamilies = function () {
         .filter(family => !!family);
 };
 
-Population.prototype.getFamilyCount = function () {
+Population.prototype.getFamilyCount = function() {
     return this.getFamilies().length;
 };
 
-Population.prototype.agePopulation = function (
-    isNewYear,
-    resourceStore,
-    worldTimer,
-    history
-) {
+Population.prototype.agePopulation = function(isNewYear, resourceStore, worldTimer, history) {
     const isEmpty = resourceStore.isOutOfFood();
 
     this.population.forEach(person => {
@@ -145,18 +136,18 @@ Population.prototype.agePopulation = function (
     if (worldTimer.day % logRate === 0) {
         history.census.population.push({
             year: worldTimer.year,
-            x   : `Day: ${worldTimer.day} Year ${worldTimer.year}`,
-            y   : this.getLivingPopulationCount()
+            x: `Day: ${worldTimer.day} Year ${worldTimer.year}`,
+            y: this.getLivingPopulationCount()
         });
         history.census.workforce.push({
             year: worldTimer.year,
-            x   : `Day: ${worldTimer.day} Year ${worldTimer.year}`,
-            y   : this.getWorkforceCount()
+            x: `Day: ${worldTimer.day} Year ${worldTimer.year}`,
+            y: this.getWorkforceCount()
         });
     }
 };
 
-Population.prototype.findMate = function (person) {
+Population.prototype.findMate = function(person) {
     if (this.__shouldMarry()) {
         const sameSexCondition = this.__shouldSameSexMarry()
             ? p => p.sex === person.sex
@@ -165,23 +156,17 @@ Population.prototype.findMate = function (person) {
         return this.getLivingPopulation().find(
             p =>
                 p.isSingle &&
-        p.id !== person.id &&
-        sameSexCondition(p) &&
-        (person.age - MARRY_AGE_RANGE >= p.age ||
-          person.age + MARRY_AGE_RANGE <= p.age)
+                p.id !== person.id &&
+                sameSexCondition(p) &&
+                (person.age - MARRY_AGE_RANGE >= p.age || person.age + MARRY_AGE_RANGE <= p.age)
         );
     }
 };
 
-Population.prototype.createFamilyUnit = function (
-    resourceStore,
-    worldTimer,
-    history
-) {
+Population.prototype.createFamilyUnit = function() {
     this.getLivingPopulation().forEach(person => {
         if (person.isSingle && this.__canMarry(person)) {
             const mate = this.findMate(person);
-
             if (mate) {
                 person.isSingle = false;
                 person.mateId = mate.id;
@@ -190,21 +175,18 @@ Population.prototype.createFamilyUnit = function (
             }
         }
     });
-    const logRate = getHistoryLogRate(worldTimer.tickSpeed);
-    if (worldTimer.day % logRate === 0) {
-        history.census.families.push({
-            year: worldTimer.year,
-            x   : `Day: ${worldTimer.day} Year ${worldTimer.year}`,
-            y   : this.getFamilyCount()
-        });
-    }
+    // const logRate = getHistoryLogRate(worldTimer.tickSpeed);
+    // if (worldTimer.day % logRate === 0) {
+    //     history.census.families.push({
+    //         year: worldTimer.year,
+    //         x: `Day: ${worldTimer.day} Year ${worldTimer.year}`,
+    //         y: this.getFamilyCount()
+    //     });
+    // }
 };
 
-Population.prototype.procreate = function (resourceStore, worldTimer, history) {
-    if (
-        worldTimer.day % PROCREATION_ATTEMPT_RATE === 0 &&
-    !resourceStore.isOutOfFood()
-    ) {
+Population.prototype.procreate = function(day) {
+    if (day % PROCREATION_ATTEMPT_RATE === 0) {
         this.getFamilies().forEach(family => {
             const couple = [
                 this.population.find(p => p.id === family.mateId1),
@@ -232,43 +214,38 @@ Population.prototype.procreate = function (resourceStore, worldTimer, history) {
     }
 };
 
-Population.prototype.__canMate = function (male, female) {
+Population.prototype.__canMate = function(male, female) {
     if (!female || !male || ![male, female].every(p => p.isAlive)) {
         return false;
     }
-    return (
-        female.daysSinceLastBirth >= MINIMUM_DAYS_SINCE_LAST_BIRTH &&
-    female.age <= 45
-    );
+    return female.daysSinceLastBirth >= MINIMUM_DAYS_SINCE_LAST_BIRTH && female.age <= 45;
 };
 
-Population.prototype.__canMarry = function (person) {
+Population.prototype.__canMarry = function(person) {
     return person.age >= MARRY_AGE;
 };
 
-Population.prototype.__shouldSameSexMarry = function () {
+Population.prototype.__shouldSameSexMarry = function() {
     return !(Math.random() > SAME_SEX_MARRIAGE_RATE);
 };
 
-Population.prototype.__shouldMarry = function () {
+Population.prototype.__shouldMarry = function() {
     return !(Math.random() > CREATE_FAMILY_UNIT_RATE);
 };
 
-Population.prototype.__shouldMate = function () {
+Population.prototype.__shouldMate = function() {
     return !(Math.random() > CREATE_CHILD_RATE);
 };
 
-Population.prototype.__shouldLive = function (person, noFood) {
-    function _godFunction (magicNumber) {
+Population.prototype.__shouldLive = function(person, noFood) {
+    function _godFunction(magicNumber) {
         return !(Math.random() < (noFood ? magicNumber * 200 : magicNumber));
     }
-    const ageRange = DEATH_CHANGE_RANGES.find(
-        ageRange => person.age <= ageRange.age
-    );
+    const ageRange = DEATH_AGE_CHANGE_RANGES.find(ageRange => person.age <= ageRange.age);
     return _godFunction(ageRange.modifier);
 };
 
-function _getAgeBetween (min, max) {
+function _getAgeBetween(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
