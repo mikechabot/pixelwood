@@ -3,8 +3,6 @@ import TimerControl from 'components/TimerControl';
 import PopulationList from './components/PopulationList';
 import Header from './components/Header';
 
-import 'bulma/css/bulma.css'
-
 class App extends Component {
 
   render() {

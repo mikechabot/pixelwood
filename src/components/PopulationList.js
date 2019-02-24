@@ -6,18 +6,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle, faUsers } from '@fortawesome/free-solid-svg-icons';
 
 import Population from 'domain/population';
+import { POPULATION_TABLE_SCHEMA } from 'domain/const/population';
+
+import DataTable from './DataTable';
+
+const cellRenderer = (rowData, dataKey) => {
+  const value = get(rowData, dataKey)
+
+  let displayValue;
+  switch(dataKey) {
+    case 'family.hasChildren':
+    case 'isAlive':
+    case 'isMated':
+    case 'isWorker': {
+      displayValue = value ? <CheckCircle/> : <TimesCircle/>
+      break;
+    }
+    default: {
+      displayValue = value;
+    }
+  }
+  return (
+    <div>{displayValue}</div>
+  )
+}
 
 @observer
 class PopulationList extends Component {
 
   population = new Population();
-
-  getMate(person) {
-    if (person.mateId) {
-      return this.population.people
-        .find(mate => person.id === mate.mateId);
-    }
-  }
 
   render() {
     return (
@@ -26,41 +43,12 @@ class PopulationList extends Component {
           <FontAwesomeIcon icon={faUsers}/>
           <strong>&nbsp;Population List ({this.population.people.length})</strong>
         </p>
-        <table className="table is-striped">
-          <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Sex</th>
-            <th>isWorker?</th>
-            <th>isAlive?</th>
-            <th>isMated?</th>
-            <th>Mate</th>
-            <th>hasChildren</th>
-            <th>Number of Children</th>
-          </tr>
-          </thead>
-          <tbody>
-          {
-            this.population.people
-              .map((citizen, index) => (
-                <tr key={citizen.id}>
-                  <td>{index}</td>
-                  <td>{citizen.fullName}</td>
-                  <td>{citizen.age}</td>
-                  <td>{citizen.sex}</td>
-                  <td>{citizen.isWorker ? <CheckCircle/> : <TimesCircle/>}</td>
-                  <td>{citizen.isAlive ? <CheckCircle/> : <TimesCircle/>}</td>
-                  <td>{citizen.isMated ? <CheckCircle/> : <TimesCircle/>}</td>
-                  <td>{get(citizen, 'mate.fullName')}</td>
-                  <td>{get(citizen, 'family.hasChildren') ? <CheckCircle/> : <TimesCircle/>}</td>
-                  <td>{get(citizen, 'family.children.length')}</td>
-                </tr>
-              ))
-          }
-          </tbody>
-        </table>
+        <DataTable
+          tableKey="population-list"
+          data={this.population.people}
+          schema={POPULATION_TABLE_SCHEMA}
+          cellRenderer={cellRenderer}
+        />
       </section>
     );
   }

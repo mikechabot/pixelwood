@@ -17,12 +17,16 @@ class Population {
   @observable people = [];
   @observable families = [];
 
-  constructor() {
-    for (let i = 0; i < 10; i++) {
+  constructor(populationSize = 10) {
+    for (let i = 0; i < populationSize; i++) {
       this.addPerson(
         this.newPerson()
       );
     }
+  }
+
+  @computed get size() {
+    return this.people.length;
   }
 
   @computed get living() {

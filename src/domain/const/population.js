@@ -1,15 +1,87 @@
 export const CHILD_WORK_AGE = 10;
 
+export const POPULATION_TABLE_SCHEMA = [
+  { propKey: 'fullName', label: 'Name' },
+  { propKey: 'age', label: 'Age' },
+  { propKey: 'sex', label: 'Name' },
+  { propKey: 'isWorker', label: 'isWorker' },
+  { propKey: 'isAlive', label: 'isAlive' },
+  { propKey: 'isMated', label: 'isMated' },
+  { propKey: 'mate.fullName', label: 'Mate', defaultVal: 'None' },
+  { propKey: 'family.hasChildren', label: 'hasChildren' },
+  { propKey: 'family.children.length', label: '# of Children', defaultVal: 0 },
+]
+
+
 export const SEX = {
   MALE: 'Male',
   FEMALE: 'Female'
 };
 
+/**
+ * Max age of a person when constructing the population
+ * @type {number}
+ */
 export const MAX_INITIAL_AGE = 68;
+
+/**
+ * Max number of children a woman can birth
+ * @type {number}
+ */
 export const MAX_CHILDREN = 10;
 
+/**
+ * Time lag between births
+ * @type {number}
+ */
 export const MINIMUM_DAYS_SINCE_LAST_BIRTH = 365;
 
+/**
+ * Age when marrying becomes available
+ * @type {number}
+ */
+export const MARRY_AGE = 15;
+
+/**
+ * Chance to create a family unit
+ * @type {number}
+ */
+export const CREATE_FAMILY_UNIT_RATE = 0.005;
+
+/**
+ * Age between marryable peoples
+ * @type {number}
+ */
+export const MARRY_AGE_RANGE = 10;
+
+/**
+ * Days on which to attempt procreation
+ * @type {number}
+ */
+export const DAYS_TO_ATTEMPT_PROCREATION = 3;
+
+/**
+ * Chance to create a child
+ * @type {number}
+ */
+export const CREATE_CHILD_RATE = 0.05;
+
+/**
+ * Chance a woman takes the man's last name
+ * @type {number}
+ */
+export const TAKE_LAST_NAME = .25;
+
+/**
+ * Chance a woman hyphenates her name
+ * @type {number}
+ */
+export const HYPHENATE_LAST_NAME = .25;
+
+/**
+ * Chance to die by age range.
+ * @type {*[]}
+ */
 export const DEATH_CHANGE_RANGES = [
   {
     age: 5,
@@ -69,10 +141,4 @@ export const DEATH_CHANGE_RANGES = [
   }
 ];
 
-export const MARRY_AGE = 15;
-export const CREATE_FAMILY_UNIT_RATE = 0.005;
-export const MARRY_AGE_RANGE = 10;
-export const PROCREATION_ATTEMPT_RATE = 3;
-export const CREATE_CHILD_RATE = 0.05;
-export const TAKE_LAST_NAME = .25;
-export const HYPHENATE_LAST_NAME = .25;
+

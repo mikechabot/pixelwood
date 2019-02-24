@@ -4,7 +4,7 @@ import {
   CREATE_FAMILY_UNIT_RATE,
   DEATH_CHANGE_RANGES,
   HYPHENATE_LAST_NAME,
-  PROCREATION_ATTEMPT_RATE,
+  DAYS_TO_ATTEMPT_PROCREATION,
   TAKE_LAST_NAME
 } from '../domain/const/population';
 
@@ -17,7 +17,7 @@ export const isAvailableToWork = (person) => {
 };
 
 export const isProcreationDay = (day) => {
-  return day % PROCREATION_ATTEMPT_RATE === 0
+  return day % DAYS_TO_ATTEMPT_PROCREATION === 0
 }
 
 export const shouldProcreate = () => {
