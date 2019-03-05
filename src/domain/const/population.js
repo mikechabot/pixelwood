@@ -8,8 +8,8 @@ export const POPULATION_TABLE_SCHEMA = [
   { propKey: 'isAlive', label: 'isAlive' },
   { propKey: 'isMated', label: 'isMated' },
   { propKey: 'mate.fullName', label: 'Mate', defaultVal: 'None' },
-  { propKey: 'family.hasChildren', label: 'hasChildren' },
-  { propKey: 'family.children.length', label: '# of Children', defaultVal: 0 },
+  { propKey: 'hasChildren', label: 'hasChildren' },
+  { propKey: 'family.numberOfChildren', label: '# of Children', defaultVal: 0 },
 ]
 
 

@@ -4,7 +4,6 @@ import timer from '../Timer';
 import Family from '../family';
 import PersonFactory from '../person';
 
-import { getNumberBetween } from 'util/population';
 import {
   isAvailableToWork,
   isProcreationDay,

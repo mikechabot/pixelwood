@@ -14,8 +14,9 @@ const cellRenderer = (rowData, dataKey) => {
   const value = get(rowData, dataKey)
 
   let displayValue;
+  console.log(dataKey, rowData, get(rowData, dataKey));
   switch(dataKey) {
-    case 'family.hasChildren':
+    case 'hasChildren':
     case 'isAlive':
     case 'isMated':
     case 'isWorker': {
