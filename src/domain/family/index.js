@@ -1,13 +1,8 @@
 import chance from 'util/chance';
 import { action, computed, observable } from 'mobx';
 
-import PersonFactory from '../person';
-
-import {
-  shouldHyphenateLastName,
-  shouldProcreate,
-  shouldTakeLastName
-} from '../../util/population';
+import {ChildFactory} from '../person';
+import {shouldProcreate} from '../../util/population';
 
 class Family {
 
@@ -69,18 +64,11 @@ class Family {
    * @returns {Person}
    */
   createChild() {
-    const child = PersonFactory();
-    child.age = 1;
-    child.lastName = this.surname;
-    child.isWorker = false;
-    return child;
+    return ChildFactory(this);
   }
 
   canProcreate() {
-    return this.husband.isAlive
-      && this.wife.isAlive
-      && this.wife.canGiveBirth
-      && this.wife.age <= 45
+    return this.wife.canGiveBirth
       && shouldProcreate()
   }
 

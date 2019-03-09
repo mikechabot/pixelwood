@@ -8,7 +8,12 @@ import {
   shouldHyphenateLastName,
   shouldTakeLastName
 } from '../../util/population';
-import { MAX_CHILDREN, MINIMUM_DAYS_SINCE_LAST_BIRTH, SEX } from '../const/population';
+import {
+  MAX_CHILD_BEARING_AGE,
+  MAX_CHILDREN,
+  MINIMUM_DAYS_SINCE_LAST_BIRTH,
+  SEX
+} from '../const/population';
 
 class Female extends Person {
 
@@ -25,12 +30,15 @@ class Female extends Person {
   }
 
   @computed get isWidow() {
-    return this.isMated && this.mate.isAlive;
+    return this.isMated && !this.mate.isAlive;
   }
 
   @computed get canGiveBirth() {
-    return this.daysSinceLastBirth >= MINIMUM_DAYS_SINCE_LAST_BIRTH
-    && this.numberOfChildren < this.maxChildren
+    return this.isAlive
+      && this.age < MAX_CHILD_BEARING_AGE
+      && !this.isWidow
+      && this.daysSinceLastBirth >= MINIMUM_DAYS_SINCE_LAST_BIRTH
+      && this.numberOfChildren < this.maxChildren;
   }
 
   @action

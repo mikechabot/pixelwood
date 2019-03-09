@@ -23,6 +23,10 @@ class Person {
     this.firstName = chance.first({ gender: this.sex.toLowerCase() });
   }
 
+  @computed get theAge() {
+    return this.age;
+  }
+
   @computed get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }

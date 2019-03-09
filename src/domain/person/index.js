@@ -9,7 +9,20 @@ const randomSex = () => {
     : SEX.FEMALE
 }
 
-const PersonFactory = () => {
+export const ChildFactory = (family) => {
+  const child = randomSex() === SEX.MALE
+    ? new Male()
+    : new Female()
+
+  child.age = 1;
+  child.lastName = family.surname;
+  child.isWorker = false;
+
+  return child;
+};
+
+
+export const PersonFactory = () => {
   switch (randomSex()) {
     case SEX.MALE:
       return new Male();
@@ -20,5 +33,3 @@ const PersonFactory = () => {
     }
   }
 };
-
-export default PersonFactory;

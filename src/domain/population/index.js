@@ -2,7 +2,7 @@ import { action, computed, observable, reaction } from 'mobx';
 
 import timer from '../Timer';
 import Family from '../family';
-import PersonFactory from '../person';
+import {PersonFactory} from '../person';
 
 import {
   isAvailableToWork,
@@ -132,4 +132,4 @@ class Population {
 
 }
 
-export default Population;
+export default new Population();

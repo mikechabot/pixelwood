@@ -1,61 +1,74 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 import get from 'lodash.get';
+
+import DataTable from './DataTable';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle, faUsers } from '@fortawesome/free-solid-svg-icons';
 
-import Population from 'domain/population';
+import population from 'domain/population';
 import { POPULATION_TABLE_SCHEMA } from 'domain/const/population';
 
-import DataTable from './DataTable';
+const CheckCircle = () => (<FontAwesomeIcon className="has-text-success" icon={faCheckCircle}/>);
+const TimesCircle = () => (<FontAwesomeIcon className="has-text-danger" icon={faTimesCircle}/>);
 
-const cellRenderer = (rowData, dataKey) => {
-  const value = get(rowData, dataKey)
-
-  let displayValue;
-  console.log(dataKey, rowData, get(rowData, dataKey));
-  switch(dataKey) {
-    case 'hasChildren':
-    case 'isAlive':
-    case 'isMated':
-    case 'isWorker': {
-      displayValue = value ? <CheckCircle/> : <TimesCircle/>
-      break;
+@observer
+class CellRenderer extends Component {
+  render() {
+    switch (this.props.dataKey) {
+      case 'hasChildren':
+      case 'isAlive':
+      case 'isMated':
+      case 'isWorker': {
+        return (
+          <div>
+            {
+              get(this.props.rowData, this.props.dataKey)
+                ? <CheckCircle/>
+                : <TimesCircle/>
+            }
+          </div>
+        )
+        break;
+      }
+      default: {
+        return (
+          <div>{get(this.props.rowData, this.props.dataKey)}</div>
+        )
+      }
     }
-    default: {
-      displayValue = value;
-    }
+    return (
+      <div>Unmapped dataKey</div>
+    );
   }
-  return (
-    <div>{displayValue}</div>
-  )
 }
 
 @observer
 class PopulationList extends Component {
-
-  population = new Population();
-
   render() {
     return (
       <section className="section">
         <p className="is-size-3">
           <FontAwesomeIcon icon={faUsers}/>
-          <strong>&nbsp;Population List ({this.population.people.length})</strong>
+          <strong>&nbsp;Population List ({population.people.length})</strong>
         </p>
         <DataTable
           tableKey="population-list"
-          data={this.population.people}
+          data={population.people}
           schema={POPULATION_TABLE_SCHEMA}
-          cellRenderer={cellRenderer}
+          cellRenderer={CellRenderer}
         />
       </section>
     );
   }
 }
 
-const CheckCircle = () => (<FontAwesomeIcon className="has-text-success" icon={faCheckCircle}/>);
-const TimesCircle = () => (<FontAwesomeIcon className="has-text-danger" icon={faTimesCircle}/>);
+CellRenderer.propTypes = {
+  rowData: PropTypes.instanceOf(Object).isRequired,
+  dataKey: PropTypes.string.isRequired,
+}
+
 
 export default PopulationList;

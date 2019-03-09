@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import TimerControl from 'components/TimerControl';
-import PopulationList from './components/PopulationList';
+
 import Header from './components/Header';
+import PopulationList from './components/PopulationList';
+import TickDetails from './components/Tick/TickDisplay';
+import TickControls from './components/Tick/TickControls';
 
 class App extends Component {
 
@@ -9,7 +11,10 @@ class App extends Component {
     return (
       <div className="container">
         <Header/>
-        <TimerControl/>
+        <section className="section">
+          <TickDetails />
+          <TickControls/>
+        </section>
         <PopulationList/>
       </div>
     );

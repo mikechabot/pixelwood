@@ -1,17 +1,16 @@
 export const CHILD_WORK_AGE = 10;
 
 export const POPULATION_TABLE_SCHEMA = [
-  { propKey: 'fullName', label: 'Name' },
-  { propKey: 'age', label: 'Age' },
-  { propKey: 'sex', label: 'Name' },
-  { propKey: 'isWorker', label: 'isWorker' },
-  { propKey: 'isAlive', label: 'isAlive' },
-  { propKey: 'isMated', label: 'isMated' },
-  { propKey: 'mate.fullName', label: 'Mate', defaultVal: 'None' },
-  { propKey: 'hasChildren', label: 'hasChildren' },
-  { propKey: 'family.numberOfChildren', label: '# of Children', defaultVal: 0 },
+  { propKey: 'fullName', label: 'Name', width: 150 },
+  { propKey: 'age', label: 'Age', width: 40 },
+  { propKey: 'sex', label: 'Sex', width: 60 },
+  { propKey: 'isWorker', label: 'Worker?', width: 100 },
+  { propKey: 'isAlive', label: 'Alive?', width: 100 },
+  { propKey: 'isMated', label: 'Mated?', width: 100 },
+  { propKey: 'mate.fullName', label: 'Mate', defaultVal: 'None', width: 150 },
+  { propKey: 'hasChildren', label: 'Children?', width: 100 },
+  { propKey: 'family.numberOfChildren', label: '# of Children', defaultVal: 0, width: 150 },
 ]
-
 
 export const SEX = {
   MALE: 'Male',
@@ -28,7 +27,7 @@ export const MAX_INITIAL_AGE = 68;
  * Max number of children a woman can birth
  * @type {number}
  */
-export const MAX_CHILDREN = 10;
+export const MAX_CHILDREN = 6;
 
 /**
  * Time lag between births
@@ -55,16 +54,22 @@ export const CREATE_FAMILY_UNIT_RATE = 0.005;
 export const MARRY_AGE_RANGE = 10;
 
 /**
+ * Max age a woman can give birth
+ * @type {number}
+ */
+export const MAX_CHILD_BEARING_AGE = 50;
+
+/**
  * Days on which to attempt procreation
  * @type {number}
  */
-export const DAYS_TO_ATTEMPT_PROCREATION = 3;
+export const DAYS_TO_ATTEMPT_PROCREATION = 2;
 
 /**
  * Chance to create a child
  * @type {number}
  */
-export const CREATE_CHILD_RATE = 0.05;
+export const CREATE_CHILD_RATE = .05;
 
 /**
  * Chance a woman takes the man's last name

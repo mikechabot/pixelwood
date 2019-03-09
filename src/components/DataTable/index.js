@@ -13,32 +13,36 @@ const DataTable = ({
   schema,
   tableKey,
   cellRenderer
-}) => (
-  <AutoSizer disableHeight>
-    {({width}) => (
-      <Table
-        ref={tableKey}
-        headerHeight={20}
-        height={data.length * DEFAULT_ROW_HEIGHT + HEADER_HEIGHT}
-        noRowsRenderer={() => <div>Population is empty</div>}
-        rowHeight={DEFAULT_ROW_HEIGHT}
-        rowGetter={({index}) => data[index]}
-        rowCount={data.length}
-        width={width}>
-        {
-         schema.map(column => (
-            <Column
-              key={column.propKey}
-              label={column.label}
-              dataKey={column.propKey}
-              width={column.width || 200}
-              cellRenderer={({rowData, dataKey}) => cellRenderer(rowData, dataKey)}
-            />
-          ))
-        }
-      </Table>
-    )}
-  </AutoSizer>
-)
+}) => {
+  const Component = cellRenderer;
+  return (
+    <AutoSizer disableHeight>
+      {({width}) => (
+        <Table
+          ref={tableKey}
+          headerHeight={20}
+          height={data.length * DEFAULT_ROW_HEIGHT + HEADER_HEIGHT}
+          noRowsRenderer={() => <div>Population is empty</div>}
+          rowHeight={DEFAULT_ROW_HEIGHT}
+          rowGetter={({index}) => data[index]}
+          rowCount={data.length}
+          width={width}>
+          {
+            schema.map(column => (
+              <Column
+                key={column.propKey}
+                label={column.label}
+                dataKey={column.propKey}
+                width={column.width || 200}
+                cellRenderer={({rowData, dataKey}) => <Component rowData={rowData} dataKey={dataKey}/>}
+              />
+            ))
+          }
+        </Table>
+      )}
+    </AutoSizer>
+  )
+}
+
 
 export default DataTable;
