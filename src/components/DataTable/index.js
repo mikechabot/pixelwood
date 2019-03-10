@@ -1,7 +1,5 @@
 import React from 'react';
-import Table from 'react-virtualized/dist/es/Table/Table';
-import Column from 'react-virtualized/dist/es/Table/Column';
-import { AutoSizer } from 'react-virtualized';
+import { AutoSizer, Table, Column } from 'react-virtualized';
 
 import 'react-virtualized/styles.css';
 
@@ -20,8 +18,8 @@ const DataTable = ({
       {({width}) => (
         <Table
           ref={tableKey}
-          headerHeight={20}
-          height={data.length * DEFAULT_ROW_HEIGHT + HEADER_HEIGHT}
+          headerHeight={HEADER_HEIGHT}
+          height={345}
           noRowsRenderer={() => <div>Population is empty</div>}
           rowHeight={DEFAULT_ROW_HEIGHT}
           rowGetter={({index}) => data[index]}

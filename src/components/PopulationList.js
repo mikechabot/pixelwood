@@ -30,8 +30,7 @@ class CellRenderer extends Component {
                 : <TimesCircle/>
             }
           </div>
-        )
-        break;
+        );
       }
       default: {
         return (
@@ -39,9 +38,6 @@ class CellRenderer extends Component {
         )
       }
     }
-    return (
-      <div>Unmapped dataKey</div>
-    );
   }
 }
 
@@ -54,12 +50,15 @@ class PopulationList extends Component {
           <FontAwesomeIcon icon={faUsers}/>
           <strong>&nbsp;Population List ({population.people.length})</strong>
         </p>
-        <DataTable
-          tableKey="population-list"
-          data={population.people}
-          schema={POPULATION_TABLE_SCHEMA}
-          cellRenderer={CellRenderer}
-        />
+        <br />
+        <div className="box">
+          <DataTable
+            tableKey="population-list"
+            data={population.people}
+            schema={POPULATION_TABLE_SCHEMA}
+            cellRenderer={CellRenderer}
+          />
+        </div>
       </section>
     );
   }
