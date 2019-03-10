@@ -1,4 +1,4 @@
-const DEFAULT_SPEED = 500;
+const DEFAULT_SPEED = 10000;
 
 export const TICK_SPEED = {
   NORMAL: 'NORMAL',

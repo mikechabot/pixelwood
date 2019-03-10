@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import Header from './components/Header';
 import PopulationList from './components/PopulationList';
-import TickDetails from './components/Tick/TickDisplay';
-import TickControls from './components/Tick/TickControls';
+import TickDetails from './components/tick/TickDisplay';
+import TickControls from './components/tick/TickControls';
 
 class App extends Component {
 
@@ -15,7 +15,9 @@ class App extends Component {
           <TickDetails />
           <TickControls/>
         </section>
-        <PopulationList/>
+        <section className="section">
+          <PopulationList/>
+        </section>
       </div>
     );
   }
